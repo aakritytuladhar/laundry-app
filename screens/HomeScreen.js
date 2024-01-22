@@ -6,6 +6,7 @@ import axios from "axios";
 // import { StyleSheet } from "react-native-web";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import Carousel from "../components/Carousel";
 
 const HomeScreen = () => {
   const [location, setLocation] = useState(null);
@@ -37,6 +38,7 @@ const HomeScreen = () => {
   }, []);
 
   return (
+    // for andriod we use safeareaproviders
     <SafeAreaProvider>
       <SafeAreaView>
         {/* location and profile */}
@@ -71,7 +73,7 @@ const HomeScreen = () => {
                 borderRadius: 20,
                 position: "relative",
                 zIndex: 1,
-                float: "left",
+                left: 0,
               }}
               source={{
                 uri: "https://lh3.googleusercontent.com/-RnpzrGr1z-w/AAAAAAAAAAI/AAAAAAAAAAA/AFNEGgL8i7Pea4iiU-eW2pLtFSAapYEdcg/photo.jpg?sz=46",
@@ -95,6 +97,8 @@ const HomeScreen = () => {
           <TextInput placeholder="Search for item or more" />
           <AntDesign name="search1" size={20} color="red" />
         </View>
+        {/* Image Carosal */}
+        <Carousel />
       </SafeAreaView>
     </SafeAreaProvider>
   );

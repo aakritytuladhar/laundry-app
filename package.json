@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.0",
-    "axios": "^1.6.5",
+    "axios": "^1.6.7",
     "deprecated-react-native-prop-types": "^5.0.0",
     "expo": "~49.0.15",
     "expo-location": "~16.1.0",

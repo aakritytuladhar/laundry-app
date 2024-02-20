@@ -15,59 +15,66 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import Carousels from "../components/Carousels";
 import Services from "../components/Services";
 import DressItem from "../components/DressItem";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../ProductReducer";
 
-const dress = [
-  {
-    id: "1",
-    name: "T-shirt",
-    image: require("../assets/dressitem/Tshirt.png"),
-    quatity: 0,
-    price: 10,
-  },
-  {
-    id: "2",
-    name: "Shorts",
-    image: require("../assets/dressitem/shorts.png"),
-    quatity: 0,
-    price: 10,
-  },
-  {
-    id: "3",
-    name: "Hoddie",
-    image: require("../assets/dressitem/hoodie.png"),
-    quatity: 0,
-    price: 10,
-  },
-  {
-    id: "4",
-    name: "Pants",
-    image: require("../assets/dressitem/pants.png"),
-    quatity: 0,
-    price: 10,
-  },
-  {
-    id: "5",
-    name: "Shirt",
-    image: require("../assets/dressitem/shirt.png"),
-    quatity: 0,
-    price: 10,
-  },
-  {
-    id: "6",
-    name: "Tops",
-    image: require("../assets/dressitem/woman-clothes.png"),
-    quatity: 0,
-    price: 10,
-  },
-  {
-    id: "7",
-    name: "Blanket",
-    image: require("../assets/dressitem/blanket.png"),
-    quatity: 0,
-    price: 10,
-  },
-];
 const HomeScreen = () => {
+  const services = [
+    {
+      id: "1",
+      name: "T-shirt",
+      image: require("../assets/dressitem/Tshirt.png"),
+      quantity: 0,
+      price: 10,
+    },
+    {
+      id: "2",
+      name: "Shorts",
+      image: require("../assets/dressitem/shorts.png"),
+      quantity: 0,
+      price: 10,
+    },
+    {
+      id: "3",
+      name: "Hoddie",
+      image: require("../assets/dressitem/hoodie.png"),
+      quantity: 0,
+      price: 10,
+    },
+    {
+      id: "4",
+      name: "Pants",
+      image: require("../assets/dressitem/pants.png"),
+      quantity: 0,
+      price: 10,
+    },
+    {
+      id: "5",
+      name: "Shirt",
+      image: require("../assets/dressitem/shirt.png"),
+      quantity: 0,
+      price: 10,
+    },
+    {
+      id: "6",
+      name: "Tops",
+      image: require("../assets/dressitem/woman-clothes.png"),
+      quantity: 0,
+      price: 10,
+    },
+    {
+      id: "7",
+      name: "Blanket",
+      image: require("../assets/dressitem/blanket.png"),
+      quantity: 0,
+      price: 10,
+    },
+  ];
+
+  //cart reducer call
+  const cart = useSelector((state) => state.cart.cart);
+  // console.log(cart);
+  // for location
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
 
@@ -95,6 +102,21 @@ const HomeScreen = () => {
   useEffect(() => {
     getLocationAsync();
   }, []);
+  // calling product reducer
+  const product = useSelector((state) => state.product.product);
+  // console.log("product array", product);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (product.length > 0) return;
+    const fetchProducts = () => {
+      services.map((service) => dispatch(getProducts(service)));
+    };
+    fetchProducts();
+    // console.log("show ", product);
+  }, [dispatch, product, services]);
+  useEffect(() => {
+    console.log("show ", product);
+  }, [product]);
 
   return (
     // for Android, we use SafeAreaProvider
@@ -168,8 +190,8 @@ const HomeScreen = () => {
             </>
           )}
           data={[{ key: "DressItem" }]}
-          renderItem={({}) => <DressItem />}
-          // keyExtractor={(dress) => dress.key}
+          renderItem={({ item }) => <DressItem item={services[0]} />}
+          keyExtractor={(item) => item.key}
         />
       </SafeAreaView>
     </SafeAreaProvider>

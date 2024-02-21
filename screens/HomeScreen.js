@@ -16,6 +16,7 @@ import Services from "../components/Services";
 import DressItem from "../components/DressItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../ProductReducer";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
   const services = [
@@ -70,8 +71,6 @@ const HomeScreen = () => {
     },
   ];
 
-  //cart reducer call
-  const cart = useSelector((state) => state.cart.cart);
   // console.log(cart);
   // for location
   const [location, setLocation] = useState(null);
@@ -101,6 +100,15 @@ const HomeScreen = () => {
   useEffect(() => {
     getLocationAsync();
   }, []);
+
+  //cart reducer call
+  const cart = useSelector((state) => state.cart.cart);
+  // Calculate total
+  const total = cart
+    .map((item) => item.quantity * item.price)
+    .reduce((curr, prev) => curr + prev, 0);
+  // initization of navigator
+  const navigation = useNavigation();
   // calling product reducer
   const product = useSelector((state) => state.product.product);
   // console.log("product array", product);
@@ -119,80 +127,114 @@ const HomeScreen = () => {
 
   return (
     // for Android, we use SafeAreaProvider
-
-    <SafeAreaProvider>
-      <SafeAreaView style={{ backgroundColor: "#F0F0F0", flex: 1 }}>
-        <FlatList
-          ListHeaderComponent={() => (
-            <>
-              {/* location and profile */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  padding: 10,
-                }}>
-                <MaterialIcons name="location-on" size={30} color="red" />
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "600",
-                      position: "relative",
-                      zIndex: 1,
-                    }}>
-                    Home
-                  </Text>
-                  {location && (
-                    <Text style={{ paddingRight: 72 }}>
-                      {address && <Text>{address}</Text>}
+    <>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ backgroundColor: "#F0F0F0", flex: 1 }}>
+          <FlatList
+            ListHeaderComponent={() => (
+              <>
+                {/* location and profile */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    padding: 10,
+                  }}>
+                  <MaterialIcons name="location-on" size={30} color="red" />
+                  <View>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "600",
+                        position: "relative",
+                        zIndex: 1,
+                      }}>
+                      Home
                     </Text>
-                  )}
+                    {location && (
+                      <Text style={{ paddingRight: 72 }}>
+                        {address && <Text>{address}</Text>}
+                      </Text>
+                    )}
+                  </View>
+                  <Pressable style={{ marginLeft: "auto", marginRight: 7 }}>
+                    <Image
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 20,
+                        position: "relative",
+                        zIndex: 1,
+                        left: 0,
+                      }}
+                      source={{
+                        uri: "https://lh3.googleusercontent.com/-RnpzrGr1z-w/AAAAAAAAAAI/AAAAAAAAAAA/AFNEGgL8i7Pea4iiU-eW2pLtFSAapYEdcg/photo.jpg?sz=46",
+                      }}
+                    />
+                  </Pressable>
                 </View>
-                <Pressable style={{ marginLeft: "auto", marginRight: 7 }}>
-                  <Image
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 20,
-                      position: "relative",
-                      zIndex: 1,
-                      left: 0,
-                    }}
-                    source={{
-                      uri: "https://lh3.googleusercontent.com/-RnpzrGr1z-w/AAAAAAAAAAI/AAAAAAAAAAA/AFNEGgL8i7Pea4iiU-eW2pLtFSAapYEdcg/photo.jpg?sz=46",
-                    }}
-                  />
-                </Pressable>
-              </View>
-              {/* Search Bar */}
-              <View
-                style={{
-                  padding: 10,
-                  margin: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderWidth: 0.8,
-                  borderColor: "638889",
-                  borderRadius: 7,
-                  height: 40,
-                }}>
-                <TextInput placeholder="Search for item or more" />
-                <AntDesign name="search1" size={20} color="red" />
-              </View>
-              {/* Image Carosal */}
-              <Carousels />
-              {/* Services */}
-              <Services />
-            </>
-          )}
-          data={services}
-          renderItem={({ item }) => <DressItem item={item} />}
-          keyExtractor={(item) => item.id}
-        />
-      </SafeAreaView>
-    </SafeAreaProvider>
+                {/* Search Bar */}
+                <View
+                  style={{
+                    padding: 10,
+                    margin: 10,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderWidth: 0.8,
+                    borderColor: "638889",
+                    borderRadius: 7,
+                    height: 40,
+                  }}>
+                  <TextInput placeholder="Search for item or more" />
+                  <AntDesign name="search1" size={20} color="red" />
+                </View>
+                {/* Image Carosal */}
+                <Carousels />
+                {/* Services */}
+                <Services />
+              </>
+            )}
+            data={services}
+            renderItem={({ item }) => <DressItem item={item} />}
+            keyExtractor={(item) => item.id}
+          />
+        </SafeAreaView>
+      </SafeAreaProvider>
+      {total === 0 ? null : (
+        <Pressable
+          style={{
+            backgroundColor: "#088F8F",
+            padding: 10,
+            marginBottom: 30,
+            margin: 15,
+            borderRadius: 7,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}>
+          <View>
+            <Text style={{ fontSize: 17, fontWeight: "600", color: "white" }}>
+              {cart.length} items | Rs. {total}
+            </Text>
+            <Text
+              style={{
+                fontSize: 13,
+                fontWeight: "400",
+                color: "white",
+                marginVertical: 6,
+              }}>
+              Extra charges may applied
+            </Text>
+          </View>
+          <Pressable onPress={() => navigation.navigate("PickUp")}>
+            <Text style={{ fontSize: 14, fontWeight: "400", color: "white" }}>
+              Procced to Pickup
+            </Text>
+          </Pressable>
+        </Pressable>
+      )}
+    </>
   );
 };
 

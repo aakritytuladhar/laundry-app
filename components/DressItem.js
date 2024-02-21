@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, Text, View, Image, FlatList } from "react-native";
+import { Pressable, Text, View, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
@@ -17,63 +17,11 @@ const DressItem = ({ item }) => {
     dispatch(incrementQty(item));
   };
 
-  const dress = [
-    {
-      id: "1",
-      name: "T-shirt",
-      image: require("../assets/dressitem/Tshirt.png"),
-      quantity: 0,
-      price: 10,
-    },
-    {
-      id: "2",
-      name: "Shorts",
-      image: require("../assets/dressitem/shorts.png"),
-      quantity: 0,
-      price: 10,
-    },
-    {
-      id: "3",
-      name: "Hoodie",
-      image: require("../assets/dressitem/hoodie.png"),
-      quantity: 0,
-      price: 10,
-    },
-    {
-      id: "4",
-      name: "Pants",
-      image: require("../assets/dressitem/pants.png"),
-      quantity: 0,
-      price: 10,
-    },
-    {
-      id: "5",
-      name: "Shirt",
-      image: require("../assets/dressitem/shirt.png"),
-      quantity: 0,
-      price: 10,
-    },
-    {
-      id: "6",
-      name: "Tops",
-      image: require("../assets/dressitem/woman-clothes.png"),
-      quantity: 0,
-      price: 10,
-    },
-    {
-      id: "7",
-      name: "Blanket",
-      image: require("../assets/dressitem/blanket.png"),
-      quantity: 0,
-      price: 10,
-    },
-  ];
+  const cartItem = cart.find((c) => c.id === item.id);
+  const quantity = cartItem ? cartItem.quantity : 0;
 
-  const renderItem = ({ item }) => {
-    const cartItem = cart.find((c) => c.id === item.id);
-    const quantity = cartItem ? cartItem.quantity : 0;
-
-    return (
+  return (
+    <>
       <Pressable
         style={{
           margin: 15,
@@ -98,7 +46,7 @@ const DressItem = ({ item }) => {
         <Text style={{ textAlign: "center", marginRight: 10 }}>
           Rs. {item.price}
         </Text>
-        {cartItem ? (
+        {quantity > 0 ? (
           <>
             <Pressable
               onPress={() => {
@@ -179,30 +127,7 @@ const DressItem = ({ item }) => {
           </Pressable>
         )}
       </Pressable>
-    );
-  };
-
-  return (
-    <View style={{ padding: 1 }}>
-      <Text
-        style={{
-          fontSize: 16,
-          fontWeight: "500",
-          margin: 5,
-          textAlign: "center",
-        }}>
-        Laundry Item
-      </Text>
-      <View>
-        <FlatList
-          data={dress}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          vertical
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-    </View>
+    </>
   );
 };
 

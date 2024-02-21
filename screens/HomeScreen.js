@@ -1,4 +1,3 @@
-// rnfes
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -184,14 +183,13 @@ const HomeScreen = () => {
               </View>
               {/* Image Carosal */}
               <Carousels />
-
               {/* Services */}
               <Services />
             </>
           )}
-          data={[{ key: "DressItem" }]}
-          renderItem={({ item }) => <DressItem item={services[0]} />}
-          keyExtractor={(item) => item.key}
+          data={services}
+          renderItem={({ item }) => <DressItem item={item} />}
+          keyExtractor={(item) => item.id}
         />
       </SafeAreaView>
     </SafeAreaProvider>

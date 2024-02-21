@@ -12,7 +12,7 @@ export const CartSlice = createSlice({
       );
       if (itemPresent) {
         itemPresent.quantity++;
-        console.log(itemPresent.quantity);
+        // console.log(itemPresent.quantity);
       } else {
         state.cart.push({ ...action.payload, quantity: 1 });
       }
